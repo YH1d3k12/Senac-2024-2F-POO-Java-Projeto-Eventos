@@ -8,63 +8,71 @@ public class Event {
     // Attributes
     private Integer id;
     private String name;
-    private Integer organizationId;
+    private Integer organizerId;
+    private Organizer organizer;
     private Integer locationId;
+    private Location location;
     private String description;
     private Integer vacancies;
     private Date date;
-    private List<Person> participants;
+    private Participant participants;
 
     // Constructor
     public Event(
-            String name,
-            Integer organizationId,
-            Integer locationId,
-            String description,
-            Integer vacancies,
-            Date date)
-            
-    {
+        String name,
+        Integer organizerId,
+        Integer locationId,
+        String description,
+        Integer vacancies,
+        Date date
+    ) {
         this.name = name;
-        this.organizationId = organizationId;
+        this.organizerId = organizerId;
         this.locationId = locationId;
         this.description = description;
         this.vacancies = vacancies;
         this.date = date;
-        this.participants = new ArrayList<>();
     }
 
     // Getters
     public Integer getId() {
-        return id;
+        return this.id;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public Integer getOrganizationId() {
-        return organizationId;
+    public Integer getOrganizerId() {
+        return this.organizerId;
+    }
+
+    public Organizer getOrganizer() {
+        return this.organizer;
     }
 
     public Integer getLocationId() {
-        return locationId;
+        return this.locationId;
+    }
+
+    public Location getLocation() {
+        return this.location;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public Integer getVacancies() {
-        return vacancies;
+        return this.vacancies;
     }
 
     public Date getDate() {
-        return date;
+        return this.date;
     }
 
-    public List<Person> getParticipants() {
-        return participants;
+    public Participant[] getParticipants() {
+        return this.participants;
     }
 
     // Setters
@@ -76,12 +84,20 @@ public class Event {
         this.name = name;
     }
 
-    public void setOrganizationId(Integer organizationId) {
-        this.organizationId = organizationId;
+    public void setOrganizerId(Integer organizerId) {
+        this.organizerId = organizerId;
+    }
+
+    public void setOrganizer(Organizer organizer) {
+        this.organizer = organizer;
     }
 
     public void setLocationId(Integer locationId) {
         this.locationId = locationId;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public void setDescription(String description) {
@@ -96,7 +112,33 @@ public class Event {
         this.date = date;
     }
 
-    public void addParticipant(Person participant) {
+    public void setParticipants(Participant participants) {
+        this.participants = participants;
+    }
+
+    public void addParticipant(Participant participant) {
         this.participants.add(participant);
+    }
+
+    @Override
+    public String toString() {
+        return (
+            "Nome: " + this.name + "\n" +
+            "Organizador: " + this.organizer.getName() + "\n" +
+            "Local: " + this.location.getDescription() + "\n" +
+            "Descrição: " + this.description + "\n" +
+            "Vagas: " + this.vacancies + "\n" +
+            "Data: " + this.date
+        );
+    }
+
+    public Event createEvent(Scanner scanner) {
+        String name = utilities.GetValues.getStringInput("Digite o nome: ", scanner);
+        Integer organizerId = utilities.GetValues.getIntInput("Digite o ID do organizador: ", scanner);
+        Integer locationId = utilities.GetValues.getIntInput("Digite o ID do local: ", scanner);
+        String description = utilities.GetValues.getStringInput("Digite a descrição: ", scanner);
+        Integer vacancies = utilities.GetValues.getIntInput("Digite o número de vagas: ", scanner);
+        Date date = utilities.GetValues.getDateInput("Digite a data: ", scanner);
+        return new Event(name, organizerId, locationId, description, vacancies, date);
     }
 }
