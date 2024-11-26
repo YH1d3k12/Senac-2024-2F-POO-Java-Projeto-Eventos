@@ -23,6 +23,9 @@ public class app {
             System.out.println("2. Buscar um participante");
             System.out.println("3. Criar um participante");
             System.out.println("4. Atualizar um participante");
+            System.out.println("5. Deletar um participante");
+            System.out.println("---------------------------");
+            System.out.println("0. Sair");
             menu = utilities.GetValues.getIntInput("Digite a opção desejada: ", scanner);
 
             switch (menu) {
@@ -54,6 +57,15 @@ public class app {
                     participant = ParticipantServices.updateParticipant(id);
                     DAO.closeConnect();
                     System.out.println("Participante atualizado com sucesso." + "\n\n" + participant);
+                    break;
+                case 5:
+                    id = utilities.GetValues.getIntInput("Digite o id do participante: ", scanner);
+                    ParticipantServices.deleteParticipant(id);
+                    DAO.closeConnect();
+                    System.out.println("Participante deletado com sucesso.");
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Operação inválida.");

@@ -98,4 +98,15 @@ public class ParticipantServices {
             return null;
         }
     }
+
+    public static void deleteParticipant(Integer id) {
+        try {
+            String query = "DELETE FROM participante WHERE id = ?";
+            PreparedStatement stmt = DAO.prepareStatement(query);
+            stmt.setInt(1, id);
+            stmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar o participante: " + e.getMessage());
+        }
+    }
 }
