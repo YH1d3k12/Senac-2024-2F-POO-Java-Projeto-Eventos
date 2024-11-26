@@ -1,31 +1,37 @@
 package models;
 
-public class Participant {
-    // Attributes
-    private Integer personId;
-    private Integer eventId;
+public class Participant extends Person {
+    private String phone;
 
-    // Constructor
-    public Participant(Integer personId, Integer eventId) {
-        this.personId = personId;
-        this.eventId = eventId;
+    public Participant(
+        String name,
+        String phone
+    ) {
+        super(name);
+        this.phone = phone;
     }
 
-    // Getters
-    public Integer getPersonId() {
-        return personId;
+    // Setters.
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public Integer getEventId() {
-        return eventId;
+    // Getters.
+    public String getPhone() {
+        return this.phone;
     }
 
-    // Setters
-    public void setPersonId(Integer personId) {
-        this.personId = personId;
+    @Override
+    public String toString() {
+        return (
+            "Nome: " + this.getName() + "\n" +
+            "phone: " + this.phone
+        );
     }
 
-    public void setEventId(Integer eventId) {
-        this.eventId = eventId;
+    public Participant createParticipant(Scanner scanner) {
+        String name = utilities.GetValues.getStringInput("Digite o nome: ", scanner);
+        String phone = utilities.GetValues.getStringInput("Digite o phone: ", scanner);
+        return new Participant(name, phone);
     }
 }

@@ -3,6 +3,7 @@ package models;
 public class Person {
     private Integer id;
     private String name;
+    private Notification notifications[];
 
     public Person(
         String name
@@ -18,6 +19,10 @@ public class Person {
     public void setName(String name) {
         this.name = name;
     }
+    
+    public void setNotifications(Notification notifications[]) {
+        this.notifications = notifications;
+    }
 
     // Getters.
     public Integer getId() {
@@ -26,6 +31,14 @@ public class Person {
 
     public String getName() {
         return this.name;
+    }
+
+    public Notification[] getNotifications() {
+        return this.notifications;
+    }
+
+    public void addNotification(Notification notification) {
+        this.notifications.add(notification);
     }
 
     @Override

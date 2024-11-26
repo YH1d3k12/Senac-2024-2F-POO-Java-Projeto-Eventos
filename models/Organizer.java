@@ -1,9 +1,7 @@
 package models;
 
-
 public class Organizer extends Person {
     private String email;
-    private Notification notifications[];
 
     public Organizer(
         String name,
@@ -18,17 +16,9 @@ public class Organizer extends Person {
         this.email = email;
     }
 
-    public void setNotifications(Notification notifications[]) {
-        this.notifications = notifications;
-    }
-
     // Getters.
     public String getEmail() {
         return this.email;
-    }
-
-    public Notification[] getNotifications() {
-        return this.notifications;
     }
 
     @Override
@@ -39,9 +29,9 @@ public class Organizer extends Person {
         );
     }
 
-    public Organizer createOrganizer() {
-        String name = utilities.GetValues.getStringInput("Digite o nome: ", null);
-        String email = utilities.GetValues.getStringInput("Digite o email: ", null);
+    public Organizer createOrganizer(Scanner scanner) {
+        String name = utilities.GetValues.getStringInput("Digite o nome: ", scanner);
+        String email = utilities.GetValues.getStringInput("Digite o email: ", scanner);
         return new Organizer(name, email);
     }
 }
