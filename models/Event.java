@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 
 public class Event {
     // Attributes
@@ -15,7 +16,7 @@ public class Event {
     private String description;
     private Integer vacancies;
     private Date date;
-    private Participant participants;
+    private List<Participant> participants;
 
     // Constructor
     public Event(
@@ -32,47 +33,6 @@ public class Event {
         this.description = description;
         this.vacancies = vacancies;
         this.date = date;
-    }
-
-    // Getters
-    public Integer getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Integer getOrganizerId() {
-        return this.organizerId;
-    }
-
-    public Organizer getOrganizer() {
-        return this.organizer;
-    }
-
-    public Integer getLocationId() {
-        return this.locationId;
-    }
-
-    public Location getLocation() {
-        return this.location;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public Integer getVacancies() {
-        return this.vacancies;
-    }
-
-    public Date getDate() {
-        return this.date;
-    }
-
-    public Participant[] getParticipants() {
-        return this.participants;
     }
 
     // Setters
@@ -112,10 +72,51 @@ public class Event {
         this.date = date;
     }
 
-    public void setParticipants(Participant participants) {
+    public void setParticipants(List<Participant> participants) {
         this.participants = participants;
     }
 
+    // Getters
+    public Integer getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Integer getOrganizerId() {
+        return this.organizerId;
+    }
+
+    public Organizer getOrganizer() {
+        return this.organizer;
+    }
+
+    public Integer getLocationId() {
+        return this.locationId;
+    }
+
+    public Location getLocation() {
+        return this.location;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public Integer getVacancies() {
+        return this.vacancies;
+    }
+
+    public Date getDate() {
+        return this.date;
+    }
+
+    public List<Participant> getParticipants() {
+        return this.participants;
+    }
+    
     public void addParticipant(Participant participant) {
         this.participants.add(participant);
     }

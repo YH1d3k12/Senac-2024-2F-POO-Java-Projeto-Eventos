@@ -1,7 +1,7 @@
 package models;
 
 import java.sql.Date;
-
+import java.util.Scanner;
 public class NotificationPhone extends Notification {
     private Integer participantId;
     private Participant participant;

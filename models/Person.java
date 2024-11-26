@@ -1,9 +1,10 @@
 package models;
 
+import java.util.List;
 public class Person {
     private Integer id;
     private String name;
-    private Notification notifications[];
+    private List<Notification> notifications;
 
     public Person(
         String name
@@ -20,7 +21,7 @@ public class Person {
         this.name = name;
     }
     
-    public void setNotifications(Notification notifications[]) {
+    public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
 
@@ -33,7 +34,7 @@ public class Person {
         return this.name;
     }
 
-    public Notification[] getNotifications() {
+    public List<Notification> getNotifications() {
         return this.notifications;
     }
 

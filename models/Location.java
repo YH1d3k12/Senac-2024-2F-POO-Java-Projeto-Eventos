@@ -1,10 +1,13 @@
 package models;
 
+import java.util.List;
+import java.util.Scanner;
+
 public class Location {
     private Integer id;
     private String description;
     private Integer vacancies;
-    private Event events[];
+    private List<Event> events;
 
     // Constructor
     public Location(
@@ -28,7 +31,7 @@ public class Location {
         return this.vacancies;
     }
 
-    public Event[] getEvents() {
+    public List<Event> getEvents() {
         return this.events;
     }
 
@@ -45,7 +48,7 @@ public class Location {
         this.vacancies = vacancies;
     }
 
-    public void setEvents(Event events[]) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 
@@ -67,9 +70,9 @@ public class Location {
         }
     }
 
-    public Location createLocation() {
-        String description = utilities.GetValues.getStringInput("Digite a descrição: ", null);
-        Integer vacancies = utilities.GetValues.getIntegerInput("Digite o número de vagas: ", null);
+    public Location createLocation(Scanner scanner) {
+        String description = utilities.GetValues.getStringInput("Digite a descrição: ", scanner);
+        Integer vacancies = utilities.GetValues.getIntInput("Digite o número de vagas: ", scanner);
         return new Location(description, vacancies);
     }
 }

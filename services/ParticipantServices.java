@@ -1,10 +1,11 @@
-package dao;
+package services;
 
 import models.Participant;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import DAO.DAO;
 
 public class ParticipantServices {
     
@@ -12,7 +13,7 @@ public class ParticipantServices {
         List<Participant> participants = new ArrayList<>();
         
         try {
-            ResultSet sql = DAO.executeQuery("SELECT * FROM participant");
+            ResultSet sql = DAO.executeQuery("SELECT * FROM participante");
             
             while (sql.next()) {
                 Participant participant = new Participant(
@@ -32,7 +33,7 @@ public class ParticipantServices {
         Participant participant = null;
         
         try {
-            String query = "SELECT * FROM participant WHERE id = ?";
+            String query = "SELECT * FROM participante WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
             stmt.setInt(1, id);
             ResultSet sql = stmt.executeQuery();
@@ -55,11 +56,11 @@ public class ParticipantServices {
         try {
             Participant newParticipant = Participant.createParticipant(scanner);
 
-            String query = "INSERT INTO participant (name, phone) VALUES (?, ?)";
+            String query = "INSERT INTO participante (name, phone) VALUES (?, ?)";
             PreparedStatement stmt = DAO.prepareStatement(query);
 
             stmt.setString(1, newParticipant.getName());
-            stmt.setDate(2, newParticipant.getPhone());
+            stmt.setString(2, newParticipant.getPhone());
             stmt.execute();            
             return newParticipant;
         } catch (SQLException e) {
@@ -75,6 +76,7 @@ public class ParticipantServices {
             Participant participant = getParticipantById(id);
             if (participant == null) {
                 System.out.println("Participante não encontrado.");
+                scanner.close();
                 return null;
             }
 
@@ -83,7 +85,7 @@ public class ParticipantServices {
             String newPhone = utilities.GetValues.getStringInput("Digite o novo phone: ", scanner);
             participant.setPhone(newPhone);
 
-            String query = "UPDATE participant SET name = ?, phone = ? WHERE id = ?";
+            String query = "UPDATE participante SET name = ?, phone = ? WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
 
             stmt.setString(1, participant.getName());

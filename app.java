@@ -1,5 +1,8 @@
-import java.sql.DriverManager;
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
+import models.Participant;
+import services.ParticipantServices;
 
 import DAO.DAO;
 
@@ -8,9 +11,14 @@ public class app {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         List<Participant> participants = new ArrayList<>();
-
         int menu = 0;
+        Participant participant;
+        int id;
+
         do {
+            participant = null;
+            id = 0;
+
             System.out.println("1. Listar participantes");
             System.out.println("2. Buscar um participante");
             System.out.println("3. Criar um participante");
@@ -21,13 +29,13 @@ public class app {
                 case 1:
                     participants = ParticipantServices.getParticipants();
                     DAO.closeConnect();
-                    for (Participant participant : participants) {
-                        System.out.println(participant);
+                    for (Participant p : participants) {
+                        System.out.println(p);
                     }
                     break;
                 case 2:
-                    Integer id = utilities.GetValues.getIntInput("Digite o id do participante: ", scanner);
-                    Participant participant = ParticipantServices.getParticipantById(id);
+                    id = utilities.GetValues.getIntInput("Digite o id do participante: ", scanner);
+                    participant = ParticipantServices.getParticipantById(id);
                     DAO.closeConnect();
                     if (participant != null) {
                         System.out.println(participant);
@@ -36,21 +44,16 @@ public class app {
                     }
                     break;
                 case 3:
-                    Participant newParticipant = ParticipantServices.createParticipant();
-                    participants.add(newParticipant);
+                    participant = ParticipantServices.createParticipant();
+                    DAO.closeConnect();
+                    participants.add(participant);
                     System.out.println("Participante criado com sucesso.");
                     break;
                 case 4:
-                    Integer id = utilities.GetValues.getIntInput("Digite o id do participante: ", scanner);
-                    Participant participant = ParticipantServices.getParticipantById(id);
+                    id = utilities.GetValues.getIntInput("Digite o id do participante: ", scanner);
+                    participant = ParticipantServices.updateParticipant(id);
                     DAO.closeConnect();
-                    if (participant != null) {
-                        System.out.println(participant);
-                        Participant updatedParticipant = ParticipantServices.updateParticipant(participant);
-                        System.out.println("Participante atualizado com sucesso.");
-                    } else {
-                        System.out.println("Participante não encontrado.");
-                    }
+                    System.out.println("Participante atualizado com sucesso." + "\n\n" + participant);
                     break;
                 default:
                     System.out.println("Operação inválida.");

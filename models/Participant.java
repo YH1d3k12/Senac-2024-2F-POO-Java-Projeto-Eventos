@@ -1,5 +1,5 @@
 package models;
-
+import java.util.Scanner;
 public class Participant extends Person {
     private String phone;
 
@@ -29,7 +29,7 @@ public class Participant extends Person {
         );
     }
 
-    public Participant createParticipant(Scanner scanner) {
+    public static Participant createParticipant(Scanner scanner) {
         String name = utilities.GetValues.getStringInput("Digite o nome: ", scanner);
         String phone = utilities.GetValues.getStringInput("Digite o phone: ", scanner);
         return new Participant(name, phone);

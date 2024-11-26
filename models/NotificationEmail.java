@@ -1,7 +1,7 @@
 package models;
 
 import java.sql.Date;
-
+import java.util.Scanner;
 public class NotificationEmail extends Notification {
     private Integer organizerId;
     private Organizer organizer;

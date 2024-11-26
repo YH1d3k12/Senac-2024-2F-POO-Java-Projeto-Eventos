@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Scanner;
+
 public class Organizer extends Person {
     private String email;
 
@@ -29,7 +31,7 @@ public class Organizer extends Person {
         );
     }
 
-    public Organizer createOrganizer(Scanner scanner) {
+    public static Organizer createOrganizer(Scanner scanner) {
         String name = utilities.GetValues.getStringInput("Digite o nome: ", scanner);
         String email = utilities.GetValues.getStringInput("Digite o email: ", scanner);
         return new Organizer(name, email);
