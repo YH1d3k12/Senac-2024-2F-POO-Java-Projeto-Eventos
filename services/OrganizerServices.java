@@ -84,7 +84,7 @@ public class OrganizerServices {
             String newEmail = utilities.GetValues.getStringInput("Digite o novo email: ", scanner);
             Organizer.setEmail(newEmail);
 
-            String query = "UPDATE organizer SET name = ?, phone = ? WHERE id = ?";
+            String query = "UPDATE organizer SET name = ?, email = ? WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
 
             stmt.setString(1, Organizer.getName());

@@ -24,6 +24,7 @@ public class Participant extends Person {
     @Override
     public String toString() {
         return (
+            "Id: " + this.getId() + "\n" +
             "Nome: " + this.getName() + "\n" +
             "phone: " + this.phone
         );

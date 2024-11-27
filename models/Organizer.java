@@ -26,6 +26,7 @@ public class Organizer extends Person {
     @Override
     public String toString() {
         return (
+            "Id: " + this.getId() + "\n" +
             "Nome: " + this.getName() + "\n" +
             "Email: " + this.email
         );

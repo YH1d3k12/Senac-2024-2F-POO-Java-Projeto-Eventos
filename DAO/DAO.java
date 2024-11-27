@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DAO {
-    private static final String url = "jdbc:mysql://localhost:3306/eventos";
+    private static final String url = "jdbc:mysql://localhost:3306/events";
     private static final String user = "root";
     private static final String password = "";
     private static Connection con = null;
