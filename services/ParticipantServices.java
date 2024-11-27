@@ -69,7 +69,6 @@ public class ParticipantServices {
         }
     }
 
-    // Update
     public static Participant updateParticipant(Integer id) {
         Scanner scanner = new Scanner(System.in);
         try {
@@ -82,7 +81,7 @@ public class ParticipantServices {
 
             String newName = utilities.GetValues.getStringInput("Digite o novo nome: ", scanner);
             participant.setName(newName);
-            String newPhone = utilities.GetValues.getStringInput("Digite o novo phone: ", scanner);
+            String newPhone = utilities.GetValues.getStringInput("Digite o novo telefone: ", scanner);
             participant.setPhone(newPhone);
 
             String query = "UPDATE participante SET name = ?, phone = ? WHERE id = ?";

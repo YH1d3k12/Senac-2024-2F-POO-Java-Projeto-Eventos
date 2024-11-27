@@ -2,7 +2,9 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 import models.Participant;
+import models.Organizer;
 import services.ParticipantServices;
+import services.OrganizerServices;
 
 import DAO.DAO;
 
@@ -10,10 +12,11 @@ public class app {
 
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
+        int menu = 0, id = 0;
         List<Participant> participants = new ArrayList<>();
-        int menu = 0;
         Participant participant;
-        int id;
+        List<Organizer> organizers = new ArrayList<>();
+        Organizer organizer;
 
         do {
             participant = null;
@@ -24,6 +27,12 @@ public class app {
             System.out.println("3. Criar um participante");
             System.out.println("4. Atualizar um participante");
             System.out.println("5. Deletar um participante");
+            System.out.println("---------------------------");
+            System.out.println("6. Listar organizadores");
+            System.out.println("7. Buscar um organizador");
+            System.out.println("8. Criar um organizador");
+            System.out.println("9. Atualizar um organizador");
+            System.out.println("10. Deletar um organizador");
             System.out.println("---------------------------");
             System.out.println("0. Sair");
             menu = utilities.GetValues.getIntInput("Digite a opção desejada: ", scanner);
@@ -63,6 +72,40 @@ public class app {
                     ParticipantServices.deleteParticipant(id);
                     DAO.closeConnect();
                     System.out.println("Participante deletado com sucesso.");
+                    break;
+                case 6:
+                    organizers = OrganizerServices.getOrganizers();
+                    DAO.closeConnect();
+                    for (Organizer o : organizers) {
+                        System.out.println(o);
+                    }
+                    break;
+                case 7:
+                    id = utilities.GetValues.getIntInput("Digite o id do organizador: ", scanner);
+                    organizer = OrganizerServices.getOrganizerById(id);
+                    DAO.closeConnect();
+                    if (organizer != null) {
+                        System.out.println(organizer);
+                    } else {
+                        System.out.println("Organizador não encontrado.");
+                    }
+                    break;
+                case 8:
+                    organizer = OrganizerServices.createOrganizer();
+                    DAO.closeConnect();
+                    System.out.println("Organizador criado com sucesso.");
+                    break;
+                case 9:
+                    id = utilities.GetValues.getIntInput("Digite o id do organizador: ", scanner);
+                    organizer = OrganizerServices.updateOrganizer(id);
+                    DAO.closeConnect();
+                    System.out.println("Organizador atualizado com sucesso." + "\n\n" + organizer);
+                    break;
+                case 10:
+                    id = utilities.GetValues.getIntInput("Digite o id do organizador: ", scanner);
+                    OrganizerServices.deleteOrganizer(id);
+                    DAO.closeConnect();
+                    System.out.println("Organizador deletado com sucesso.");
                     break;
                 case 0:
                     System.out.println("Saindo...");
