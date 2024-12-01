@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import models.Participant;
 import models.Organizer;
 import models.Location;
+import models.Event;
 import services.ParticipantServices;
+import services.EventServices;
 import services.LocationServices;
 import services.OrganizerServices;
-
 import DAO.DAO;
 
 public class app {
@@ -15,13 +16,14 @@ public class app {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         int menu = 0, id = 0;
-        List<Participant> participants = new ArrayList<>();
         Participant participant;
-        List<Organizer> organizers = new ArrayList<>();
         Organizer organizer;
-        List<Location> locations = LocationServices.getLocations();
         Location locationToUpdate;
         Location location;
+        List<Participant> participants = new ArrayList<>();
+        List<Organizer> organizers = new ArrayList<>();
+        List<Location> locations = LocationServices.getLocations();
+        List<Event> events = new ArrayList<>();
 
         do {
             participant = null;
@@ -151,8 +153,7 @@ public class app {
                     break;
                 case 14:
                     id = utilities.GetValues.getIntInput("Digite o id do local de evento: ", scanner);
-                    locationToUpdate = LocationServices.updateLocation(id); // Use um nome diferente para a
-                                                                            // variável
+                    locationToUpdate = LocationServices.updateLocation(id);
                     DAO.closeConnect();
                     if (locationToUpdate != null) {
                         System.out.println("Local atualizado com sucesso." + "\n\n" + locationToUpdate);
@@ -161,17 +162,65 @@ public class app {
                     }
                     break;
                 case 15:
+                    id = utilities.GetValues.getIntInput("Digite o id do local de evento: ", scanner);
+                    LocationServices.deleteLocation(id);
+                    DAO.closeConnect();
+                    System.out.println("Local de Evento deletado com sucesso.");
                     break;
                 case 16:
+                    // Listar eventos
+                    events = EventServices.getEvents(); // Chama o serviço para pegar a lista de eventos
+                    DAO.closeConnect(); // Fecha a conexão com o banco de dados
+                    if (events != null && !events.isEmpty()) { // Verifica se a lista de eventos não está vazia
+                        for (Event e : events) {
+                            System.out.println(e); // Imprime cada evento encontrado
+                        }
+                    } else {
+                        System.out.println("Nenhum evento encontrado.");
+                    }
                     break;
                 case 17:
+                    id = utilities.GetValues.getIntInput("Digite o id do evento: ", scanner);
+                    Event event = EventServices.getEventById(id); // Método para buscar evento pelo ID
+                    DAO.closeConnect();
+                    if (event != null) {
+                        System.out.println(event); // Exibe os detalhes do evento encontrado
+                    } else {
+                        System.out.println("Evento não encontrado.");
+                    }
                     break;
                 case 18:
+                    event = EventServices.createEvent(scanner);
+                    DAO.closeConnect();
+                    if (event != null) {
+                        System.out.println("Evento criado com sucesso: " + event);
+                    } else {
+                        System.out.println("Erro ao criar o evento.");
+                    }
                     break;
-                case 19:
+                    case 19:
+                    id = utilities.GetValues.getIntInput("Digite o id do evento: ", scanner);
+                    event = EventServices.updateEvent(id); // Chama o método updateEvent passando o id
+                    DAO.closeConnect(); // Fecha a conexão com o banco de dados
+                
+                    if (event != null) {
+                        System.out.println("Evento atualizado com sucesso: " + event); // Exibe o evento atualizado
+                    } else {
+                        System.out.println("Evento não encontrado ou erro na atualização.");
+                    }
                     break;
                 case 20:
+                    id = utilities.GetValues.getIntInput("Digite o id do evento: ", scanner);
+                    EventServices.deleteEvent(id);
+                    DAO.closeConnect();
+                    System.out.println("Evento deletado com sucesso.");
                     break;
+                case 21:
+                    // Enviar notificação por telefone
+                    break;
+                case 22:
+                    // Enviar notificação por email
+                    break;        
                 case 0:
                     System.out.println("Saindo...");
                     break;

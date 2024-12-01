@@ -58,7 +58,8 @@ public class Location {
     public String toString() {
         return (
             "Descrição: " + this.description + "\n" +
-            "Vagas: " + this.vacancies
+            "Vagas: " + this.vacancies + "\n" +
+            "Id: " + this.id
         );
     }
 
