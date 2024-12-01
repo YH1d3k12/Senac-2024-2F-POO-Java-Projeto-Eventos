@@ -1,48 +1,72 @@
 # Senac-2024-2F-POO-Java-Projeto-Eventos
 
-CREATE SCHEMA eventos;
-USE eventos;
+CREATE SCHEMA IF NOT EXISTS events;
+USE events;
 
--- Criação da tabela Pessoa
-CREATE TABLE Pessoa (
+-- Creating the Participant table
+CREATE TABLE IF NOT EXISTS Participant (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(255) NOT NULL,
-    email VARCHAR(255),
-    telefone VARCHAR(20)
+    name VARCHAR(255) NOT NULL,
+    phone VARCHAR(20)
 );
 
--- Criação da tabela Local
-CREATE TABLE Local (
+-- Creating the Organizer table
+CREATE TABLE IF NOT EXISTS Organizer (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    descricao VARCHAR(255) NOT NULL,
-    vagas INT NOT NULL
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(100)
 );
 
--- Criação da tabela Evento
-CREATE TABLE Evento (
+-- Creating the Location table
+CREATE TABLE IF NOT EXISTS Location (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    idOrganizacao INT,
-    idLocal INT,
-    data DATETIME NOT NULL,
-    descricao TEXT NOT NULL,
-    vagas INT NOT NULL,
-    FOREIGN KEY (idOrganizacao) REFERENCES Pessoa(id),
-    FOREIGN KEY (idLocal) REFERENCES Local(id)
+    description VARCHAR(255) NOT NULL,
+    vacancies INT NOT NULL
 );
 
--- Criação da tabela Participacao (relação entre Evento e Pessoa)
-CREATE TABLE Participacao (
-    idEvento INT,
-    idPessoa INT,
-    PRIMARY KEY (idEvento, idPessoa),
-    FOREIGN KEY (idEvento) REFERENCES Evento(id),
-    FOREIGN KEY (idPessoa) REFERENCES Pessoa(id)
+-- Creating the Notification table
+CREATE TABLE IF NOT EXISTS Notification (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    date DATE,
+    message TEXT NOT NULL
 );
 
--- Criação da tabela Notificacao
-CREATE TABLE Notificacao (
+-- Creating the NotificationParticipant table
+CREATE TABLE IF NOT EXISTS NotificationParticipant (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    idPessoa INT,
-    mensagem TEXT NOT NULL,
-    FOREIGN KEY (idPessoa) REFERENCES Pessoa(id)
+    notification_id INT,
+    participant_id INT,
+    FOREIGN KEY (notification_id) REFERENCES Notification(id),
+    FOREIGN KEY (participant_id) REFERENCES Participant(id)
+);
+
+-- Creating the NotificationOrganizer table
+CREATE TABLE IF NOT EXISTS NotificationOrganizer (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    notification_id INT,
+    organizer_id INT,
+    FOREIGN KEY (notification_id) REFERENCES Notification(id),
+    FOREIGN KEY (organizer_id) REFERENCES Organizer(id)
+);
+
+-- Creating the EventDetails table 
+CREATE TABLE IF NOT EXISTS EventDetails (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(250),
+    organizer_id INT,
+    location_id INT,
+    date DATETIME NOT NULL,
+    description TEXT NOT NULL,
+    vacancies INT NOT NULL,
+    FOREIGN KEY (organizer_id) REFERENCES Organizer(id),
+    FOREIGN KEY (location_id) REFERENCES Location(id)
+);
+
+-- Creating the EventParticipants table
+CREATE TABLE IF NOT EXISTS EventParticipants (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    event_id INT,
+    participant_id INT,
+    FOREIGN KEY (event_id) REFERENCES EventDetails(id),
+    FOREIGN KEY (participant_id) REFERENCES Participant(id)
 );

@@ -29,17 +29,19 @@ public class GetValues {
             // Printa um texto informativo.
             System.out.println(text);
             try { 
-                value = scanner.nextInt();
+                value = scanner.nextInt();  // Lê o número inteiro
+                scanner.nextLine(); // Consome a nova linha gerada ao pressionar Enter
                 valid = true;
             }
             catch (Exception e) {
-                System.out.println("Valor invalido!\nErro: " + e);
-                scanner.next(); // Limpa o buffer do scanner.
+                System.out.println("Valor inválido! Por favor, insira um número inteiro.");
+                scanner.nextLine(); // Limpa a linha, para continuar a leitura corretamente
             }
         } while (!valid);
         return value;
     }
-
+    
+    
     public static String getStringInput(String text, Scanner scanner) {
         String value = ""; boolean valid;
         do {

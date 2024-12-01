@@ -3,7 +3,9 @@ import java.util.List;
 import java.util.ArrayList;
 import models.Participant;
 import models.Organizer;
+import models.Location;
 import services.ParticipantServices;
+import services.LocationServices;
 import services.OrganizerServices;
 
 import DAO.DAO;
@@ -17,6 +19,9 @@ public class app {
         Participant participant;
         List<Organizer> organizers = new ArrayList<>();
         Organizer organizer;
+        List<Location> locations = LocationServices.getLocations();
+        Location locationToUpdate;
+        Location location;
 
         do {
             participant = null;
@@ -34,6 +39,20 @@ public class app {
             System.out.println("9. Atualizar um organizador");
             System.out.println("10. Deletar um organizador");
             System.out.println("---------------------------");
+            System.out.println("11. Listar Locais de Eventos");
+            System.out.println("12. Buscar Locais de Eventos");
+            System.out.println("13. Criar Locais de Eventos");
+            System.out.println("14. Atualizar Locais de Eventos");
+            System.out.println("15. Deletar Locais de Eventos");
+            System.out.println("---------------------------");
+            System.out.println("16. Listar Eventos");
+            System.out.println("17. Buscar Eventos");
+            System.out.println("18. Criar Eventos");
+            System.out.println("19. Atualizar Eventos");
+            System.out.println("20. Deletar Eventos");
+            System.out.println("---------------------------");
+            System.out.println("21. Enviar notificação por telefone");
+            System.out.println("22. Enviar notificação por email");
             System.out.println("0. Sair");
             menu = utilities.GetValues.getIntInput("Digite a opção desejada: ", scanner);
 
@@ -106,6 +125,52 @@ public class app {
                     OrganizerServices.deleteOrganizer(id);
                     DAO.closeConnect();
                     System.out.println("Organizador deletado com sucesso.");
+                    break;
+                case 11:
+                    locations = LocationServices.getLocations(); // Chama o serviço de listagem de locais
+                    DAO.closeConnect();
+                    for (Location l : locations) { // Agora a iteração é feita sobre 'locations'
+                        System.out.println(l); // Imprime cada local encontrado
+                    }
+                    break;
+                case 12:
+                    id = utilities.GetValues.getIntInput("Digite o id do Local: ", scanner);
+                    location = LocationServices.getLocationById(id); // Corrigido para usar uma única variável Location
+                    DAO.closeConnect();
+                    if (location != null) { // Verifica se a localização foi encontrada
+                        System.out.println(location); // Imprime a localização encontrada
+                    } else {
+                        System.out.println("Local não encontrado.");
+                    }
+                    break;
+                case 13:
+                    // "13. Criar Locais de Eventos"
+                    LocationServices.createLocation(scanner);
+                    DAO.closeConnect();
+                    System.out.println("Local de Evento criado com sucesso.");
+                    break;
+                case 14:
+                    id = utilities.GetValues.getIntInput("Digite o id do local de evento: ", scanner);
+                    locationToUpdate = LocationServices.updateLocation(id); // Use um nome diferente para a
+                                                                            // variável
+                    DAO.closeConnect();
+                    if (locationToUpdate != null) {
+                        System.out.println("Local atualizado com sucesso." + "\n\n" + locationToUpdate);
+                    } else {
+                        System.out.println("Local não encontrado ou erro na atualização.");
+                    }
+                    break;
+                case 15:
+                    break;
+                case 16:
+                    break;
+                case 17:
+                    break;
+                case 18:
+                    break;
+                case 19:
+                    break;
+                case 20:
                     break;
                 case 0:
                     System.out.println("Saindo...");
