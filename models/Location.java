@@ -1,21 +1,19 @@
 package models;
 
 import java.util.List;
-import java.util.Scanner;
+import java.util.ArrayList; // Para inicializar a lista de eventos
 
 public class Location {
     private Integer id;
     private String description;
     private Integer vacancies;
-    private List<Event> events;
+    private List<Event> events; // Lista de eventos
 
-    // Constructor
-    public Location(
-        String description,
-        Integer vacancies
-    ) {
+    // Construtor
+    public Location(String description, Integer vacancies) {
         this.description = description;
         this.vacancies = vacancies;
+        this.events = new ArrayList<>(); // Inicializa a lista de eventos
     }
 
     // Getters
@@ -60,19 +58,15 @@ public class Location {
     public String toString() {
         return (
             "Descrição: " + this.description + "\n" +
-            "Vagas: " + this.vacancies
+            "Vagas: " + this.vacancies + "\n" +
+            "Id: " + this.id
         );
     }
 
+    // Exibe os eventos associados a esse local
     public void showEvents() {
         for (Event event : this.events) {
-            System.out.println(event);
+            System.out.println(event); // Assumindo que Event tenha um método toString() adequado
         }
-    }
-
-    public Location createLocation(Scanner scanner) {
-        String description = utilities.GetValues.getStringInput("Digite a descrição: ", scanner);
-        Integer vacancies = utilities.GetValues.getIntInput("Digite o número de vagas: ", scanner);
-        return new Location(description, vacancies);
     }
 }

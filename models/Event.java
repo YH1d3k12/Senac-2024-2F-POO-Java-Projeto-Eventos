@@ -1,145 +1,97 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.sql.Date;
+import java.sql.Time;
 
 public class Event {
-    // Attributes
-    private Integer id;
+    private int id;
     private String name;
-    private Integer organizerId;
-    private Organizer organizer;
-    private Integer locationId;
-    private Location location;
+    private int organizerId;
+    private int locationId;
+    private Date date; // Para armazenar a data
+    private Time hour; // Para armazenar a hora
     private String description;
-    private Integer vacancies;
-    private Date date;
-    private List<Participant> participants;
+    private int vacancies;
 
-    // Constructor
-    public Event(
-        String name,
-        Integer organizerId,
-        Integer locationId,
-        String description,
-        Integer vacancies,
-        Date date
-    ) {
+    // Construtor com todos os parâmetros
+    public Event(String name, int organizerId, int locationId, Date date, Time hour, String description, int vacancies) {
         this.name = name;
         this.organizerId = organizerId;
         this.locationId = locationId;
+        this.date = date;
+        this.hour = hour;
         this.description = description;
         this.vacancies = vacancies;
-        this.date = date;
     }
 
-    // Setters
-    public void setId(Integer id) {
+    // Getters e Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setOrganizerId(Integer organizerId) {
+    public int getOrganizerId() {
+        return organizerId;
+    }
+
+    public void setOrganizerId(int organizerId) {
         this.organizerId = organizerId;
     }
 
-    public void setOrganizer(Organizer organizer) {
-        this.organizer = organizer;
+    public int getLocationId() {
+        return locationId;
     }
 
-    public void setLocationId(Integer locationId) {
+    public void setLocationId(int locationId) {
         this.locationId = locationId;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setVacancies(Integer vacancies) {
-        this.vacancies = vacancies;
+    public Date getDate() {
+        return date;
     }
 
     public void setDate(Date date) {
         this.date = date;
     }
 
-    public void setParticipants(List<Participant> participants) {
-        this.participants = participants;
+    public Time getHour() {
+        return hour;
     }
 
-    // Getters
-    public Integer getId() {
-        return this.id;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Integer getOrganizerId() {
-        return this.organizerId;
-    }
-
-    public Organizer getOrganizer() {
-        return this.organizer;
-    }
-
-    public Integer getLocationId() {
-        return this.locationId;
-    }
-
-    public Location getLocation() {
-        return this.location;
+    public void setHour(Time hour) {
+        this.hour = hour;
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
-    public Integer getVacancies() {
-        return this.vacancies;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Date getDate() {
-        return this.date;
+    public int getVacancies() {
+        return vacancies;
     }
 
-    public List<Participant> getParticipants() {
-        return this.participants;
-    }
-    
-    public void addParticipant(Participant participant) {
-        this.participants.add(participant);
+    public void setVacancies(int vacancies) {
+        this.vacancies = vacancies;
     }
 
+    // Método para exibir o evento de forma legível
     @Override
     public String toString() {
-        return (
-            "Nome: " + this.name + "\n" +
-            "Organizador: " + this.organizer.getName() + "\n" +
-            "Local: " + this.location.getDescription() + "\n" +
-            "Descrição: " + this.description + "\n" +
-            "Vagas: " + this.vacancies + "\n" +
-            "Data: " + this.date
-        );
-    }
-
-    public Event createEvent(Scanner scanner) {
-        String name = utilities.GetValues.getStringInput("Digite o nome: ", scanner);
-        Integer organizerId = utilities.GetValues.getIntInput("Digite o ID do organizador: ", scanner);
-        Integer locationId = utilities.GetValues.getIntInput("Digite o ID do local: ", scanner);
-        String description = utilities.GetValues.getStringInput("Digite a descrição: ", scanner);
-        Integer vacancies = utilities.GetValues.getIntInput("Digite o número de vagas: ", scanner);
-        Date date = utilities.GetValues.getDateInput("Digite a data: ", scanner);
-        return new Event(name, organizerId, locationId, description, vacancies, date);
+        return "\n\nId: " + id + "\nEvento: " + name + "\nData: " + date + "\nHora: " + hour + "\nDescrição: " + description + "\nVagas: " + vacancies + "\n\n";
     }
 }
