@@ -13,7 +13,7 @@ public class ParticipantServices {
         List<Participant> participants = new ArrayList<>();
         
         try {
-            ResultSet sql = DAO.executeQuery("SELECT * FROM participante");
+            ResultSet sql = DAO.executeQuery("SELECT * FROM participant");
             
             while (sql.next()) {
                 Participant participant = new Participant(
@@ -33,7 +33,7 @@ public class ParticipantServices {
         Participant participant = null;
         
         try {
-            String query = "SELECT * FROM participante WHERE id = ?";
+            String query = "SELECT * FROM participant WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
             stmt.setInt(1, id);
             ResultSet sql = stmt.executeQuery();
@@ -56,7 +56,7 @@ public class ParticipantServices {
         try {
             Participant newParticipant = Participant.createParticipant(scanner);
 
-            String query = "INSERT INTO participante (name, phone) VALUES (?, ?)";
+            String query = "INSERT INTO participant (name, phone) VALUES (?, ?)";
             PreparedStatement stmt = DAO.prepareStatement(query);
 
             stmt.setString(1, newParticipant.getName());
@@ -84,7 +84,7 @@ public class ParticipantServices {
             String newPhone = utilities.GetValues.getStringInput("Digite o novo telefone: ", scanner);
             participant.setPhone(newPhone);
 
-            String query = "UPDATE participante SET name = ?, phone = ? WHERE id = ?";
+            String query = "UPDATE participant SET name = ?, phone = ? WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
 
             stmt.setString(1, participant.getName());
@@ -93,14 +93,14 @@ public class ParticipantServices {
             stmt.execute();
             return participant;
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar o participante: " + e.getMessage());
+            System.out.println("Erro ao atualizar o participant: " + e.getMessage());
             return null;
         }
     }
 
     public static void deleteParticipant(Integer id) {
         try {
-            String query = "DELETE FROM participante WHERE id = ?";
+            String query = "DELETE FROM participant WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
             stmt.setInt(1, id);
             stmt.execute();
