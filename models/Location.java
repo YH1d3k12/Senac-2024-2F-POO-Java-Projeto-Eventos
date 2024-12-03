@@ -2,6 +2,7 @@ package models;
 
 import java.util.List;
 import java.util.ArrayList; // Para inicializar a lista de eventos
+import java.util.Scanner;
 
 public class Location {
     private Integer id;
@@ -68,5 +69,11 @@ public class Location {
         for (Event event : this.events) {
             System.out.println(event); // Assumindo que Event tenha um método toString() adequado
         }
+    }
+
+    public static Location createLocation(Scanner scanner) {
+        String description = utilities.GetValues.getStringInput("Digite a descrição: ", scanner);
+        Integer vacancies = utilities.GetValues.getIntInput("Digite o número de vagas: ", scanner);
+        return new Location(description, vacancies);
     }
 }

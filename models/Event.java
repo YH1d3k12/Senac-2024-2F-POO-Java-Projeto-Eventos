@@ -2,6 +2,7 @@ package models;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Scanner;
 
 public class Event {
     private int id;
@@ -89,9 +90,23 @@ public class Event {
         this.vacancies = vacancies;
     }
 
-    // Método para exibir o evento de forma legível
     @Override
     public String toString() {
         return "\n\nId: " + id + "\nEvento: " + name + "\nData: " + date + "\nHora: " + hour + "\nDescrição: " + description + "\nVagas: " + vacancies + "\n\n";
     }
+
+    public static Event createEvent(Scanner scanner) {
+        String name = utilities.GetValues.getStringInput("Digite o nome do evento: ", scanner);
+        int organizerId = utilities.GetValues.getIntInput("Digite o ID do organizador: ", scanner);
+        int locationId = utilities.GetValues.getIntInput("Digite o ID do local: ", scanner);
+        Date date = utilities.GetValues.getDateInput("Digite a data do evento: ", scanner);
+        String hour = utilities.GetValues.getHourInput("Digite a hora do evento: ", scanner);
+        String description = utilities.GetValues.getStringInput("Digite a descrição do evento: ", scanner);
+        int vacancies = utilities.GetValues.getIntInput("Digite o número de vagas: ", scanner);
+        String timeWithSeconds = hour + ":00";
+        Time eventTime = Time.valueOf(timeWithSeconds);  // Converte a string para java.sql.Time
+
+        return new Event(name, organizerId, locationId, date, eventTime, description, vacancies);
+    }
+
 }
