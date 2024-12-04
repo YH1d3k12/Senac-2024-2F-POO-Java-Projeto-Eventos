@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import DAO.DAO;
 import models.Event;
+import models.Participant;
 import utilities.GetValues;
 
 public class EventServices {
@@ -20,17 +21,18 @@ public class EventServices {
         List<Event> events = new ArrayList<>();
 
         try {
-            ResultSet sql = DAO.executeQuery("SELECT * FROM EventDetails");
+            ResultSet sql = DAO.executeQuery("SELECT * FROM eventdetails");
 
             while (sql.next()) {
-                Event event = new Event(
-                        sql.getString("name"),
-                        sql.getInt("organizer_id"),
-                        sql.getInt("location_id"),
-                        sql.getDate("date"),
-                        sql.getTime("hour"),
-                        sql.getString("description"),
-                        sql.getInt("vacancies"));
+                Event event = new Event (
+                    sql.getString("name"),
+                    sql.getInt("organizer_id"),
+                    sql.getInt("location_id"),
+                    sql.getDate("date"),
+                    sql.getTime("hour"),
+                    sql.getString("description"),
+                    sql.getInt("vacancies")
+                );
                 event.setId(sql.getInt("id"));
                 events.add(event);
             }
@@ -45,20 +47,21 @@ public class EventServices {
         Event event = null;
 
         try {
-            String query = "SELECT * FROM EventDetails WHERE id = ?";
+            String query = "SELECT * FROM eventdetails WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
             stmt.setInt(1, id);
             ResultSet sql = stmt.executeQuery();
 
             if (sql.next()) {
                 event = new Event(
-                        sql.getString("name"),
-                        sql.getInt("organizer_id"),
-                        sql.getInt("location_id"),
-                        sql.getDate("date"),
-                        sql.getTime("hour"),
-                        sql.getString("description"),
-                        sql.getInt("vacancies"));
+                    sql.getString("name"),
+                    sql.getInt("organizer_id"),
+                    sql.getInt("location_id"),
+                    sql.getDate("date"),
+                    sql.getTime("hour"),
+                    sql.getString("description"),
+                    sql.getInt("vacancies")
+                );
                 event.setId(sql.getInt("id"));
             }
         } catch (SQLException e) {
@@ -68,61 +71,67 @@ public class EventServices {
     }
 
     // Método para criar um evento com hora e data
-    public static Event createEvent(Scanner scanner) {
-        String name = GetValues.getStringInput("Digite o nome do evento: ", scanner);
-        String description = GetValues.getStringInput("Digite a descrição do evento: ", scanner);
-        Date eventDate = GetValues.getDateInput("Digite a data do evento (Ano, Mês, Dia): ", scanner);
-        String time = GetValues.getHourInput("Digite a hora do evento (HH:mm): ", scanner);
+    public static Event createEvent() {
+        Scanner scanner = new Scanner(System.in);
 
-        Integer organizerId = GetValues.getIntInput("Digite o id do organizador: ", scanner);
-        Integer locationId = GetValues.getIntInput("Digite o id do local: ", scanner);
-        Integer vacancies = GetValues.getIntInput("Digite o número de vagas: ", scanner);
+        try {
+            Event newEvent = Event.createEvent(scanner);
+            PreparedStatement stmt = DAO.prepareStatement("INSERT INTO eventdetails (name, organizer_id, location_id, date, hour, description, vacancies) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
-        // Adiciona os segundos como "00" para a hora
-        String timeWithSeconds = time + ":00";  // Exemplo: "18:30" -> "18:30:00"
-        Time eventTime = Time.valueOf(timeWithSeconds);  // Converte a string para java.sql.Time
-
-        // Criação do evento com a data e hora separadas
-        Event newEvent = new Event(name, organizerId, locationId, eventDate, eventTime, description, vacancies);
-
-        return newEvent;
+            stmt.setString(1, newEvent.getName());
+            stmt.setInt(2, newEvent.getOrganizerId());
+            stmt.setInt(3, newEvent.getLocationId());
+            stmt.setDate(4, newEvent.getDate());
+            stmt.setTime(5, newEvent.getHour());
+            stmt.setString(6, newEvent.getDescription());
+            stmt.setInt(7, newEvent.getVacancies());
+            stmt.execute();
+            return newEvent;
+        } catch (SQLException e) {
+            System.out.println("Erro ao criar o evento: " + e.getMessage());
+            return null;
+        }
     }
 
     // Método para atualizar um evento
     public static Event updateEvent(int id) {
         Scanner scanner = new Scanner(System.in);
-        
-        // Buscar o evento atual no banco de dados usando o ID
-        Event event = EventServices.getEventById(id);
-        if (event == null) {
-            System.out.println("Evento não encontrado.");
-            return null;
-        }
-    
-        // Solicitar os novos dados para o evento
-        String name = GetValues.getStringInput("Digite o novo nome do evento (atual: " + event.getName() + "): ", scanner);
-        int organizerId = GetValues.getIntInput("Digite o ID do organizador: ", scanner);
-        int locationId = GetValues.getIntInput("Digite o ID do local: ", scanner);
-        Date eventDate = GetValues.getDateInput("Digite a nova data do evento (atual: " + event.getDate() + "): ", scanner);
-        String eventTime = GetValues.getHourInput("Digite o novo horário do evento (atual: " + event.getHour() + "): ", scanner);
-        String description = GetValues.getStringInput("Digite a nova descrição do evento (atual: " + event.getDescription() + "): ", scanner);
-        int vacancies = GetValues.getIntInput("Digite o novo número de vagas (atual: " + event.getVacancies() + "): ", scanner);
-    
-        // Adiciona os segundos como "00" para a hora
-        String timeWithSeconds = eventTime + ":00";  // Exemplo: "18:30" -> "18:30:00"
-        Time eventTimeUpdated = Time.valueOf(timeWithSeconds);  // Converte a string para java.sql.Time
+        try {
+            Event event = EventServices.getEventById(id);
+            
+            if (event == null) {
+                System.out.println("Evento não encontrado.");
+                return null;
+            }
 
-        // Criação do evento com os novos dados
-        Event updatedEvent = new Event(name, organizerId, locationId, eventDate, eventTimeUpdated, description, vacancies);
-    
-        // Atualização do evento no banco de dados
-        boolean isUpdated = EventServices.updateEventInDatabase(updatedEvent);
-    
-        if (isUpdated) {
-            System.out.println("Evento atualizado com sucesso!");
-            return updatedEvent;
-        } else {
-            System.out.println("Erro ao atualizar o evento.");
+            String newName = GetValues.getStringInput("Digite o novo nome do evento (atual: " + event.getName() + "): ", scanner);
+            int newOrganizerId = GetValues.getIntInput("Digite o ID do organizador: ", scanner);
+            int newLocationId = GetValues.getIntInput("Digite o ID do local: ", scanner);
+            Date newEventDate = GetValues.getDateInput("Digite a nova data do evento (atual: " + event.getDate() + "): ", scanner);
+            String newEventTime = GetValues.getHourInput("Digite o novo horário do evento (atual: " + event.getHour() + "): ", scanner);
+            String newDescription = GetValues.getStringInput("Digite a nova descrição do evento (atual: " + event.getDescription() + "): ", scanner);
+            int newVacancies = GetValues.getIntInput("Digite o novo número de vagas (atual: " + event.getVacancies() + "): ", scanner);
+        
+            // Adiciona os segundos como "00" para a hora
+            String newTimeWithSeconds = newEventTime + ":00";  // Exemplo: "18:30" -> "18:30:00"
+            Time eventTimeUpdated = Time.valueOf(newTimeWithSeconds);  // Converte a string para java.sql.Time
+
+            String query = "UPDATE eventdetails SET name = ?, organizer_id = ?, location_id = ?, date = ?, hour = ?, description = ?, vacancies = ? WHERE id = ?";
+            PreparedStatement stmt = DAO.prepareStatement(query);
+
+            stmt.setString(1, newName);
+            stmt.setInt(2, newOrganizerId);
+            stmt.setInt(3, newLocationId);
+            stmt.setDate(4, newEventDate);
+            stmt.setTime(5, eventTimeUpdated);
+            stmt.setString(6, newDescription);
+            stmt.setInt(7, newVacancies);
+            stmt.setInt(8, id);
+            stmt.execute();
+            return event;
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar o evento: " + e.getMessage());
             return null;
         }
     }
@@ -130,7 +139,7 @@ public class EventServices {
     // Método para deletar um evento
     public static void deleteEvent(Integer id) {
         try {
-            String query = "DELETE FROM EventDetails WHERE id = ?";
+            String query = "DELETE FROM eventdetails WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
             stmt.setInt(1, id);
             stmt.execute();
@@ -142,7 +151,7 @@ public class EventServices {
     // Método de atualização no banco de dados
     public static boolean updateEventInDatabase(Event event) {
         try {
-            String query = "UPDATE EventDetails SET name = ?, organizer_id = ?, location_id = ?, date = ?, hour = ?, description = ?, vacancies = ? WHERE id = ?";
+            String query = "UPDATE eventdetails SET name = ?, organizer_id = ?, location_id = ?, date = ?, hour = ?, description = ?, vacancies = ? WHERE id = ?";
             PreparedStatement stmt = DAO.prepareStatement(query);
             stmt.setString(1, event.getName());
             stmt.setInt(2, event.getOrganizerId());
@@ -160,5 +169,84 @@ public class EventServices {
             System.out.println("Erro ao atualizar o evento: " + e.getMessage());
             return false;
         }
+    }
+
+    public static void addParticipantToEvent() {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            int eventId = GetValues.getIntInput("Digite o ID do evento: ", scanner);
+            Event event = EventServices.getEventById(eventId);
+            if (event == null) {
+                System.out.println("Evento não encontrado.");
+                return;
+            }
+
+            int participantId = GetValues.getIntInput("Digite o ID do participante: ", scanner);
+            Participant participant = ParticipantServices.getParticipantById(participantId);
+            if (participant == null) {
+                System.out.println("Participante não encontrado.");
+                return;
+            }
+
+            String query = "INSERT INTO eventparticipants (event_id, participant_id) VALUES (?, ?)";
+            PreparedStatement stmt = DAO.prepareStatement(query);
+            stmt.setInt(1, eventId);
+            stmt.setInt(2, participantId);
+            stmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Erro ao adicionar participante ao evento: " + e.getMessage());
+        }
+    }
+
+    public static void removeParticipantFromEvent() {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            int eventId = GetValues.getIntInput("Digite o ID do evento: ", scanner);
+            Event event = EventServices.getEventById(eventId);
+            if (event == null) {
+                System.out.println("Evento não encontrado.");
+                return;
+            }
+
+            int participantId = GetValues.getIntInput("Digite o ID do participante: ", scanner);
+            Participant participant = ParticipantServices.getParticipantById(participantId);
+            if (participant == null) {
+                System.out.println("Participante não encontrado.");
+                return;
+            }
+
+            String query = "DELETE FROM eventparticipants WHERE event_id = ? AND participant_id = ?";
+            PreparedStatement stmt = DAO.prepareStatement(query);
+            stmt.setInt(1, eventId);
+            stmt.setInt(2, participantId);
+            stmt.execute();
+        } catch (SQLException e) {
+            System.out.println("Erro ao remover participante do evento: " + e.getMessage());
+        }
+    }
+
+    public static List<Participant> getParticipantsByEventId(Integer id) {
+        List<Participant> participants = new ArrayList<>();
+
+        try {
+            Event event = EventServices.getEventById(id);
+            if (event == null) {
+                System.out.println("Evento não encontrado.");
+                return participants;
+            }
+
+            String query = "SELECT * FROM eventparticipants WHERE event_id = ?";
+            PreparedStatement stmt = DAO.prepareStatement(query);
+            stmt.setInt(1, event.getId());
+            ResultSet sql = stmt.executeQuery();
+
+            while (sql.next()) {
+                Participant participant = ParticipantServices.getParticipantById(sql.getInt("participant_id"));
+                participants.add(participant);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar participantes do evento: " + e.getMessage());
+        }
+        return participants;
     }
 }

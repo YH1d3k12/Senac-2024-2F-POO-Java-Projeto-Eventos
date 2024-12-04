@@ -9,8 +9,6 @@ import utilities.GetValues;
 import java.util.Scanner;
 
 public class LocationServices {
-
-    // Método para listar todos os locais de eventos
     public static List<Location> getLocations() {
         List<Location> locations = new ArrayList<>();
         
@@ -20,7 +18,7 @@ public class LocationServices {
             while (sql.next()) {
                 Location location = new Location(
                     sql.getString("description"),
-                    sql.getInt("vacancies") // O parâmetro vagas deve ser um Integer, não String
+                    sql.getInt("vacancies")
                 );
                 location.setId(sql.getInt("id"));
                 locations.add(location);
@@ -31,7 +29,6 @@ public class LocationServices {
         return locations;
     }
 
-    // Método para buscar um local específico pelo id
     public static Location getLocationById(Integer id) {
         Location location = null;
         
@@ -54,14 +51,9 @@ public class LocationServices {
         return location;
     }
 
-    // Método para criar um novo local de evento
-
     public static Location createLocation(Scanner scanner) {
         try {
-            String description = GetValues.getStringInput("Digite a descrição do local: ", scanner);
-            Integer vacancies = GetValues.getIntInput("Digite o número de vagas: ", scanner);
-    
-            Location newLocation = new Location(description, vacancies);
+            Location newLocation = Location.createLocation(scanner);
     
             String query = "INSERT INTO location (description, vacancies) VALUES (?, ?)";
             PreparedStatement stmt = DAO.prepareStatement(query);
@@ -77,8 +69,6 @@ public class LocationServices {
         }
     }
     
-
-    // Método para atualizar um local de evento
     public static Location updateLocation(Integer id) {
         Location location = getLocationById(id);
         
@@ -109,7 +99,6 @@ public class LocationServices {
         }
     }
 
-    // Método para deletar um local de evento
     public static void deleteLocation(Integer id) {
         try {
             String query = "DELETE FROM location WHERE id = ?";

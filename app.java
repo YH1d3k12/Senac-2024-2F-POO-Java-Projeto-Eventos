@@ -21,6 +21,7 @@ public class app {
         Location locationToUpdate;
         Location location;
         List<Participant> participants = new ArrayList<>();
+        List<Participant> participantsByEvent = new ArrayList<>();
         List<Organizer> organizers = new ArrayList<>();
         List<Location> locations = LocationServices.getLocations();
         List<Event> events = new ArrayList<>();
@@ -33,7 +34,7 @@ public class app {
             System.out.println("2. Organizadores");
             System.out.println("3. Locais de Eventos");
             System.out.println("4. Eventos");
-            System.out.println("5. Outros");
+            System.out.println("5. Pessoas - Eventos");
             System.out.println("0. Sair");
             System.out.println("-----------------------------");
             menu = utilities.GetValues.getIntInput("Digite a opção desejada: ", scanner);
@@ -236,7 +237,7 @@ public class app {
                             }
                             break;
                         case 3:
-                            event = EventServices.createEvent(scanner);
+                            event = EventServices.createEvent();
                             DAO.closeConnect();
                             if (event != null) {
                                 System.out.println("Evento criado com sucesso: " + event);
@@ -270,6 +271,43 @@ public class app {
                             break;
                     }
                     break;
+                case 5:
+                    System.out.println("1. Listar participantes de um evento");
+                    System.out.println("2. Adicionar participante a um evento");
+                    System.out.println("3. Remover participante de um evento");
+                    System.out.println("0. Sair");
+                    submenu = utilities.GetValues.getIntInput("Digite a opção desejada: ", scanner);
+
+                    switch (submenu) {
+                        case 1:
+                            id = utilities.GetValues.getIntInput("Digite o id do evento: ", scanner);
+                            participantsByEvent = EventServices.getParticipantsByEventId(id);
+                            DAO.closeConnect();
+                            if (participantsByEvent != null && !participantsByEvent.isEmpty()) {
+                                for (Participant pe : participantsByEvent) {
+                                    System.out.println(pe);
+                                    System.out.println("-----------------------------");
+                                }
+                            } else {
+                                System.out.println("Nenhum participante encontrado.");
+                            }
+                            break;
+                        case 2:
+                            EventServices.addParticipantToEvent();
+                            DAO.closeConnect();
+                            break;
+                        case 3:
+                            EventServices.removeParticipantFromEvent();
+                            DAO.closeConnect();
+                            break;
+                        case 0:
+                            System.out.println("-----------------------------");
+                            System.out.println("Saindo...");
+                            break;
+                        default:
+                            System.out.println("Operação inválida.");
+                            break;
+                    }
                 default:
                     System.out.println("Operação inválida.");
                     break;
